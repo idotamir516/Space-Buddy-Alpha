@@ -12,6 +12,7 @@
 		4B8602651EBA4477009CC30F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4B8602631EBA4477009CC30F /* Main.storyboard */; };
 		4B8602671EBA4477009CC30F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4B8602661EBA4477009CC30F /* Assets.xcassets */; };
 		4B86026A1EBA4477009CC30F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4B8602681EBA4477009CC30F /* LaunchScreen.storyboard */; };
+		4B98E70E1EC9E40B00D03F6D /* DraggableImageVie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B98E70D1EC9E40B00D03F6D /* DraggableImageVie.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +23,7 @@
 		4B8602661EBA4477009CC30F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4B8602691EBA4477009CC30F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4B86026B1EBA4477009CC30F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4B98E70D1EC9E40B00D03F6D /* DraggableImageVie.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DraggableImageVie.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +58,7 @@
 			children = (
 				4B86025F1EBA4477009CC30F /* AppDelegate.swift */,
 				4B8602611EBA4477009CC30F /* ViewController.swift */,
+				4B98E70D1EC9E40B00D03F6D /* DraggableImageVie.swift */,
 				4B8602631EBA4477009CC30F /* Main.storyboard */,
 				4B8602661EBA4477009CC30F /* Assets.xcassets */,
 				4B8602681EBA4477009CC30F /* LaunchScreen.storyboard */,
@@ -138,6 +141,7 @@
 			files = (
 				4B8602621EBA4477009CC30F /* ViewController.swift in Sources */,
 				4B8602601EBA4477009CC30F /* AppDelegate.swift in Sources */,
+				4B98E70E1EC9E40B00D03F6D /* DraggableImageVie.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -301,6 +305,7 @@
 				4B8602701EBA4477009CC30F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
