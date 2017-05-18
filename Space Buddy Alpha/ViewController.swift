@@ -8,7 +8,84 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, ViewDragDelegate {
+    
+    var space = Space();
+    var bodiesList: [DraggableImageView:Body] = [:]
+    var movingBodies: [DraggableImageView:Body] = [:]
+    
+    var smallestLength: Double {
+        let width =  SpaceView.frame.width
+        let height = SpaceView.frame.height
+        return Double(width < height ? width : height);
+    }
+    
+    var spaceRadius: Double = 2E6
+    
+    func spaceToView(position: Vector2D) -> CGPoint{
+        let (x, y) = (position.x, position.y)
+        let viewSpaceRatio = smallestLength / (spaceRadius * 2)
+        let xCoor = viewSpaceRatio * x
+        let yCoor = Double(SpaceView.frame.height) - viewSpaceRatio * y
+        return CGPoint(x: xCoor, y: yCoor)
+    }
+    
+    func ViewToSpace(point: CGPoint) -> Vector2D{
+        let location = SpaceView.convert(point, from: view)
+        let spaceViewRatio = spaceRadius * 2 / smallestLength
+        let xCoor = spaceViewRatio * Double(location.x)
+        let yCoor = spaceViewRatio * Double(SpaceView.frame.height - location.y)
+        return Vector2D(x: xCoor, y: yCoor)
+    }
+    
+    func update(){
+        var newBodiesList: [DraggableImageView:Body] = [:]
+        for (view, body) in bodiesList{
+            let newBody = space.bodies.first(where: {$0 == body})!
+            newBodiesList[view] = newBody;
+        }
+        bodiesList = newBodiesList
+        putViewsInCorrectPosition()
+    }
+    
+    func putViewsInCorrectPosition(){
+        for (view, body) in bodiesList{
+            correctPosition(of: view, using: body)
+        }
+    }
+    
+    func correctPosition(of view: DraggableImageView, using body: Body){
+        let size = view.frame.size
+        let oldCenter = CGPoint(x: view.frame.origin.x + size.width / 2, y: view.frame.origin.y + size.height / 2)
+        let newCenter = spaceToView(position: body.position)
+        
+        let newFrame = view.frame.offsetBy(dx: newCenter.x - oldCenter.x, dy: newCenter.y - newCenter.y)
+        view.frame = newFrame
+    }
+    
+    func handleBegin(_ view: DraggableImageView, inLegalZone: Bool) {
+        if inLegalZone{
+            let body = bodiesList.removeValue(forKey: view)!
+            space.remove(body: body)
+            movingBodies[view] = body;
+        }else{
+            movingBodies[view] = view.createBody()
+        }
+    }
+
+    
+    func handleEnd(_ view: DraggableImageView, inLegalZone: Bool) {
+        let b = movingBodies.removeValue(forKey: view)
+        if let body = b{
+        if inLegalZone {
+            //mutate body to change its position based on where it is dropped
+            //Super important dont ignore this or it wont work
+            bodiesList[view] = body
+            space.addBody(body: body)
+        }
+        }
+    }
+
 
     @IBOutlet weak var BodiesContainer: UIView!
     @IBOutlet weak var SpaceView: UIView!
@@ -61,17 +138,41 @@ class ViewController: UIViewController {
                 let imageView = DraggableImageView(image: image)
                 imageView.frame = frame
                 imageView.lastLocation = imageView.center
+                imageView.delegate = self
                 view.addSubview(imageView)
                 frame = frame.offsetBy(dx: 0, dy: CGFloat(1.5 * h / 7))
             }
         }
         view.sendSubview(toBack: SpaceView)
     }
+    
 }
 
 
 
 class SpaceCell: UICollectionViewCell {
     
-    static let planetImages: [String: UIImage] = ["Planets":#imageLiteral(resourceName: "Earth for app"), "Asteroids": #imageLiteral(resourceName: "asteroid for app"), "Suns": #imageLiteral(resourceName: "Sun Image For App"), "Neutrons":#imageLiteral(resourceName: "Neutron For app"), "Blackholes":#imageLiteral(resourceName: "Screen Shot 2017-03-20 at 8.48.13 PM"), "blank": #imageLiteral(resourceName: "Screen Shot 2017-03-20 at 8.48.13 PM")]
+    static let planetImages: [String: UIImage] = ["Planets":#imageLiteral(resourceName: "Earth for app"), "Asteroids": #imageLiteral(resourceName: "asteroid for app"), "Suns": #imageLiteral(resourceName: "Sun Image For App"), "Neutrons":#imageLiteral(resourceName: "Neutron For app"), "Blackholes":#imageLiteral(resourceName: "Screen Shot 2017-03-20 at 8.48.13 PM")]
+    
+    static let planetMasses: [String: Double] = ["Planets":6E24, "Asteroids": 2E10, "Suns": 2E35, "Neutrons":3E35, "Blackholes":1E45]
+    
+    static let planetRadius: [String: Double] = ["Planets":6.371E6, "Asteroids": 2E3, "Suns": 695.7E6, "Neutrons":10E3, "Blackholes":13.5E3]
 }
+
+protocol ViewDragDelegate: class{
+    
+    func handleBegin(_ view: DraggableImageView, inLegalZone: Bool)
+    func handleEnd(_ view: DraggableImageView, inLegalZone: Bool)
+    
+}
+
+extension Dictionary where Value: Equatable {
+    func keysForValue(value: Value) -> Key? {
+        return filter{$1 == value}.first?.key
+        }
+    }
+
+
+
+
+

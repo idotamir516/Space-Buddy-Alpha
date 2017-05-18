@@ -10,7 +10,7 @@ import Foundation
 
 class Space{
     static let G: Double = 6.67408 * pow(10, -11);
-    static let SECONDS: Double = 5;
+    var seconds: Double = 5;
     var bodies: Set<Body> = [];
     
     func addBody(body: Body){
@@ -145,5 +145,5 @@ enum CollisionType {
 }
 
 enum BodyType{
-    case STAR, PLANET, BLACKHOLE, ASTROID
+    case STAR, PLANET, BLACKHOLE, ASTROID, NEUTRON
 }
