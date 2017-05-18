@@ -13,6 +13,7 @@ class ViewController: UIViewController, ViewDragDelegate {
     var space = Space();
     var bodiesList: [DraggableImageView:Body] = [:]
     var movingBodies: [DraggableImageView:Body] = [:]
+    var timer: Timer = Timer()
     
     var smallestLength: Double {
         let width =  SpaceView.frame.width
@@ -28,6 +29,12 @@ class ViewController: UIViewController, ViewDragDelegate {
         let xCoor = viewSpaceRatio * x
         let yCoor = Double(SpaceView.frame.height) - viewSpaceRatio * y
         return CGPoint(x: xCoor, y: yCoor)
+    }
+    
+    func createTimer() {
+        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { _ in
+            self.update()
+        })
     }
     
     func ViewToSpace(point: CGPoint) -> Vector2D{
@@ -95,6 +102,7 @@ class ViewController: UIViewController, ViewDragDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        createTimer()
         createImages()
         BodiesContainer.layer.borderColor = UIColor.darkGray.cgColor
         BodiesContainer.layer.borderWidth = 6
