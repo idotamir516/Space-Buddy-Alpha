@@ -10,7 +10,11 @@ import Foundation
 import UIKit
 
 class DraggableImageView: UIImageView{
+    var beginningLocation = CGPoint(x: 0, y: 0)
     var lastLocation = CGPoint(x: 0, y: 0)
+    var lastVelocity = Vector2D()
+    var lastTime = Date()
+    let calender = Calendar.current
     var maxSuperView: UIView {var view: UIView? = self; while (view?.superview != nil) {view = view?.superview}; return view!}
     var original: Bool = true;
     weak var delegate: ViewDragDelegate?
@@ -32,6 +36,7 @@ class DraggableImageView: UIImageView{
         let image = DraggableImageView(image: self.image)
         image.frame = self.frame;
         image.original = true;
+        image.delegate = delegate
         self.superview?.addSubview(image)
     }
     
@@ -40,22 +45,38 @@ class DraggableImageView: UIImageView{
             makeCopyImage()
             self.original = false;
         }
+        
+        let spatialDifference = Vector2D(point: self.center - self.lastLocation)
+        let component: Set<Calendar.Component> = [.nanosecond,.second, .minute, .hour]
+        let timeDifference = Double(calender.dateComponents(component, from: Date(), to: lastTime).nanosecond!) / 1E9
+        let viewVelocity = spatialDifference / Double(timeDifference)
+        
+        
         let translation  = recognizer.translation(in: self.maxSuperView)
-        self.center = CGPoint(x: lastLocation.x + translation.x, y: lastLocation.y + translation.y)
-        let inIllegalZoneBefore = DraggableImageView.IllegalZones.filter{$0.frame.contains(self.lastLocation)}.count != 0;
+        self.center = CGPoint(x: beginningLocation.x + translation.x, y: beginningLocation.y + translation.y)
+        if spatialDifference.hypotenuse != 0 && timeDifference != 0{
+            
+            lastVelocity = Vector2D(x: -viewVelocity.x, y: viewVelocity.y)
+            lastLocation = self.center
+            lastTime = Date()}
+        
+        
+        let inIllegalZoneBefore = DraggableImageView.IllegalZones.filter{$0.frame.contains(self.beginningLocation)}.count != 0;
         
         let inIllegalZoneNow = inIllegalZone()
+        
         if inIllegalZoneNow && !inIllegalZoneBefore{
             recognizer.isEnabled = false;
             recognizer.isEnabled = true;
-            delegate?.handleEnd(self, inLegalZone: !inIllegalZone())
+            delegate?.handleEnd(self, inLegalZone: !inIllegalZone(), finalVelocity: lastVelocity)
             self.removeFromSuperview();
             return;
         }
         
         if recognizer.state == .ended{
             self.alpha = 1
-            delegate?.handleEnd(self, inLegalZone: !inIllegalZone())
+            delegate?.handleEnd(self, inLegalZone: !inIllegalZone(), finalVelocity: lastVelocity)
+
             if inIllegalZoneNow{
                 self.removeFromSuperview()
             }
@@ -69,7 +90,7 @@ class DraggableImageView: UIImageView{
         self.maxSuperView.bringSubview(toFront: self)
         
         // Remember original location
-        lastLocation = self.center
+        beginningLocation = self.center
         self.alpha = 0.5
     }
     
@@ -79,7 +100,7 @@ class DraggableImageView: UIImageView{
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.alpha = 1
-        delegate?.handleEnd(self, inLegalZone: !inIllegalZone())
+        delegate?.handleEnd(self, inLegalZone: !inIllegalZone(), finalVelocity: Vector2D())
     }
 
     func createBody() -> Body{
@@ -90,3 +111,17 @@ class DraggableImageView: UIImageView{
         return body;
     }
 }
+
+extension CGPoint{
+    static func - (left: CGPoint, right: CGPoint) -> CGPoint {
+        return CGPoint(x: left.x - right.x, y: left.y - right.y)
+    }
+}
+
+extension Vector2D{
+    init(point: CGPoint){
+        x = Double(point.x)
+        y = Double(point.y)
+    }
+}
+

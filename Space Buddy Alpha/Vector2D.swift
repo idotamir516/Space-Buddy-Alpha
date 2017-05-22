@@ -25,6 +25,10 @@ struct Vector2D {
         return Vector2D(x: left.x * right, y: left.y * right)
     }
     
+    static func / (left: Vector2D, right: Double) -> Vector2D{
+        return Vector2D(x: left.x / right, y: left.y / right)
+    }
+    
     static prefix func - (vector: Vector2D) -> Vector2D {
         return Vector2D(x: -vector.x, y: -vector.y)
     }

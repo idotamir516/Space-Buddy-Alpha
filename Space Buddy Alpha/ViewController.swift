@@ -14,6 +14,8 @@ class ViewController: UIViewController, ViewDragDelegate {
     var bodiesList: [DraggableImageView:Body] = [:]
     var movingBodies: [DraggableImageView:Body] = [:]
     var timer: Timer = Timer()
+    var updateTime: Double = 0.01;
+    var spaceTime: Double = 1
     
     var smallestLength: Double {
         let width =  SpaceView.frame.width
@@ -21,7 +23,7 @@ class ViewController: UIViewController, ViewDragDelegate {
         return Double(width < height ? width : height);
     }
     
-    var spaceRadius: Double = 2E6
+    var spaceRadius: Double = 2E12
     
     func spaceToView(position: Vector2D) -> CGPoint{
         let (x, y) = (position.x, position.y)
@@ -32,7 +34,7 @@ class ViewController: UIViewController, ViewDragDelegate {
     }
     
     func createTimer() {
-        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { _ in
+        timer = Timer.scheduledTimer(withTimeInterval: updateTime, repeats: true, block: { _ in
             self.update()
         })
     }
@@ -45,13 +47,16 @@ class ViewController: UIViewController, ViewDragDelegate {
         return Vector2D(x: xCoor, y: yCoor)
     }
     
+    
     func update(){
+        print(space)
         var newBodiesList: [DraggableImageView:Body] = [:]
         for (view, body) in bodiesList{
             let newBody = space.bodies.first(where: {$0 == body})!
             newBodiesList[view] = newBody;
         }
         bodiesList = newBodiesList
+        space.update(time: spaceTime)
         putViewsInCorrectPosition()
     }
     
@@ -65,9 +70,8 @@ class ViewController: UIViewController, ViewDragDelegate {
         let size = view.frame.size
         let oldCenter = CGPoint(x: view.frame.origin.x + size.width / 2, y: view.frame.origin.y + size.height / 2)
         let newCenter = spaceToView(position: body.position)
-        
-        let newFrame = view.frame.offsetBy(dx: newCenter.x - oldCenter.x, dy: newCenter.y - newCenter.y)
-        view.frame = newFrame
+        let newFrame = view.frame.offsetBy(dx: newCenter.x - oldCenter.x, dy: newCenter.y - oldCenter.y)
+        view.frame = SpaceView.convert(newFrame, to: self.view)
     }
     
     func handleBegin(_ view: DraggableImageView, inLegalZone: Bool) {
@@ -81,14 +85,19 @@ class ViewController: UIViewController, ViewDragDelegate {
     }
 
     
-    func handleEnd(_ view: DraggableImageView, inLegalZone: Bool) {
+    func handleEnd(_ view: DraggableImageView, inLegalZone: Bool, finalVelocity: Vector2D) {
         let b = movingBodies.removeValue(forKey: view)
         if let body = b{
         if inLegalZone {
-            //mutate body to change its position based on where it is dropped
-            //Super important dont ignore this or it wont work
-            bodiesList[view] = body
-            space.addBody(body: body)
+            let viewSpaceRatio = spaceRadius * 2 / smallestLength
+            let size = view.frame.size
+            let center = CGPoint(x: view.frame.origin.x + size.width / 2, y: view.frame.origin.y + size.height / 2)
+            let position = ViewToSpace(point: center)
+            let velocity = finalVelocity * viewSpaceRatio * updateTime / spaceTime
+            let newBody = Body(mass: body.mass, position: position, velocity: velocity, radius: body.radius)
+            bodiesList[view] = newBody
+            space.remove(body: body)
+            space.addBody(body: newBody)
         }
         }
     }
@@ -170,7 +179,7 @@ class SpaceCell: UICollectionViewCell {
 protocol ViewDragDelegate: class{
     
     func handleBegin(_ view: DraggableImageView, inLegalZone: Bool)
-    func handleEnd(_ view: DraggableImageView, inLegalZone: Bool)
+    func handleEnd(_ view: DraggableImageView, inLegalZone: Bool, finalVelocity: Vector2D)
     
 }
 

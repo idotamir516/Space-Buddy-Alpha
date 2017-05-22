@@ -8,10 +8,13 @@
 
 import Foundation
 
-class Space{
+class Space: CustomStringConvertible{
     static let G: Double = 6.67408 * pow(10, -11);
     var seconds: Double = 5;
     var bodies: Set<Body> = [];
+    var description: String{
+        return bodies.reduce("", {$0 + "\n\n\($1.description)"})
+    }
     
     func addBody(body: Body){
         bodies.insert(body)
@@ -88,7 +91,7 @@ class Space{
     
 }
 
-class Body: Equatable, Hashable {
+class Body: Equatable, Hashable, CustomStringConvertible {
     static var TOTALID = 0
     let ID: Int;
     let mass: Double;
@@ -101,6 +104,9 @@ class Body: Equatable, Hashable {
         set(newVelocity) {currentState.velocity = newVelocity}}
     var acceleration: Vector2D;
     var radius: Double
+    var description: String{
+        return "Id: \(ID), Mass: \(mass), position: \(position), velocity  \(velocity) "
+    }
     
     var hashValue: Int{return ID}
     
