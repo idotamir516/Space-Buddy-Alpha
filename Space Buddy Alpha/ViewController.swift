@@ -35,13 +35,16 @@ class ViewController: UIViewController, ViewDragDelegate {
     
     @IBAction func radiusChanged(sender: UISlider) {
         timer.invalidate() // just in case this button is tapped multiple times
-        
         if(sender.value != 0){
             // start the timer
-            spaceRadius = 2E12 * Double(sender.value)
+            spaceRadius = Double(sender.value) * (2E12 - 2E6) + 2E6
+            update()
+            timer = Timer.scheduledTimer(withTimeInterval: (0.01 / Double(sender.value)), repeats: true, block: { _ in
+                self.update()
+            })
         }
         else {
-            spaceRadius = 2E12
+            spaceRadius = 2E6
         }
     }
     
