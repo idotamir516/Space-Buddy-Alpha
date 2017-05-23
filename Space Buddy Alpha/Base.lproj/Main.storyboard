@@ -38,7 +38,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="779" height="186"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="249" text="Simulation Speed:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kj2-Qw-HVL">
-                                                <rect key="frame" x="269.5" y="0.0" width="240.5" height="46.5"/>
+                                                <rect key="frame" x="269" y="0.0" width="240.5" height="46.5"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -50,7 +50,7 @@
                                                 </connections>
                                             </slider>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Radius:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vay-Z4-ssD">
-                                                <rect key="frame" x="340.5" y="93" width="98.5" height="46.5"/>
+                                                <rect key="frame" x="340" y="93" width="98.5" height="46.5"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>

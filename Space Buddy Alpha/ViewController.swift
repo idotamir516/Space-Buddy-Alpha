@@ -59,8 +59,9 @@ class ViewController: UIViewController, ViewDragDelegate {
     func spaceToView(position: Vector2D) -> CGPoint{
         let (x, y) = (position.x, position.y)
         let viewSpaceRatio = smallestLength / (spaceRadius * 2)
-        let xCoor = viewSpaceRatio * x
-        let yCoor = Double(SpaceView.frame.height) - viewSpaceRatio * y
+        let widthToHeightRatio = Double(SpaceView.frame.width.divided(by: SpaceView.frame.height))
+        let xCoor = viewSpaceRatio * (x + spaceRadius * widthToHeightRatio)
+        let yCoor = Double(SpaceView.frame.height) - viewSpaceRatio * (y + spaceRadius)
         return CGPoint(x: xCoor, y: yCoor)
     }
     
@@ -73,14 +74,21 @@ class ViewController: UIViewController, ViewDragDelegate {
     func ViewToSpace(point: CGPoint) -> Vector2D{
         let location = SpaceView.convert(point, from: view)
         let spaceViewRatio = spaceRadius * 2 / smallestLength
-        let xCoor = spaceViewRatio * Double(location.x)
-        let yCoor = spaceViewRatio * Double(SpaceView.frame.height - location.y)
+        let xCoor = spaceViewRatio * Double(location.x - SpaceView.frame.width.divided(by: 2))
+        let yCoor = spaceViewRatio * Double(SpaceView.frame.height.divided(by: 2) - location.y)
         return Vector2D(x: xCoor, y: yCoor)
     }
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let vts = ViewToSpace(point: touches.first!.location(in: view))
+        print("vts \(vts)")
+        let stv = spaceToView(position: vts)
+        print("stv \(stv)")
+        let redo = ViewToSpace(point: stv)
+        print("redo: \(redo)")
+    }
     
     func update(){
-        print(space)
         var newBodiesList: [DraggableImageView:Body] = [:]
         for (view, body) in bodiesList{
             let newBody = space.bodies.first(where: {$0 == body})!
