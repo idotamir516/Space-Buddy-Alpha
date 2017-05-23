@@ -34,41 +34,48 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Vmw-Em-nDe">
                                 <rect key="frame" x="225" y="582" width="779" height="186"/>
                                 <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="IW1-fP-JA2">
-                                        <rect key="frame" x="0.0" y="-7" width="779" height="193"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="IW1-fP-JA2">
+                                        <rect key="frame" x="0.0" y="0.0" width="779" height="186"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Simulation Speed:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kj2-Qw-HVL">
-                                                <rect key="frame" x="0.0" y="0.0" width="779" height="36"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="249" text="Simulation Speed:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kj2-Qw-HVL">
+                                                <rect key="frame" x="269.5" y="0.0" width="240.5" height="46.5"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="L2X-tG-5Rc">
-                                                <rect key="frame" x="-2" y="36" width="783" height="109"/>
+                                                <rect key="frame" x="18" y="46.5" width="743" height="47.5"/>
+                                                <connections>
+                                                    <action selector="simulationSpeedChangedWithSender:" destination="BYZ-38-t0r" eventType="valueChanged" id="ILB-C3-uxR"/>
+                                                </connections>
                                             </slider>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Radius:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vay-Z4-ssD">
-                                                <rect key="frame" x="0.0" y="144" width="779" height="20"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Radius:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vay-Z4-ssD">
+                                                <rect key="frame" x="340.5" y="93" width="98.5" height="46.5"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="AqQ-39-xci">
-                                                <rect key="frame" x="-2" y="164" width="783" height="30"/>
+                                                <rect key="frame" x="18" y="139.5" width="743" height="47.5"/>
+                                                <connections>
+                                                    <action selector="radiusChangedWithSender:" destination="BYZ-38-t0r" eventType="valueChanged" id="47Z-Wd-1gp"/>
+                                                </connections>
                                             </slider>
                                         </subviews>
                                         <constraints>
-                                            <constraint firstItem="AqQ-39-xci" firstAttribute="top" secondItem="L2X-tG-5Rc" secondAttribute="bottom" constant="20" id="Ilm-8u-fBR"/>
-                                            <constraint firstAttribute="bottom" secondItem="vay-Z4-ssD" secondAttribute="bottom" constant="29" id="XdH-jS-DzS"/>
+                                            <constraint firstItem="AqQ-39-xci" firstAttribute="leading" secondItem="IW1-fP-JA2" secondAttribute="leading" constant="20" id="OBU-Bp-Vd7"/>
+                                            <constraint firstAttribute="trailing" secondItem="AqQ-39-xci" secondAttribute="trailing" constant="20" id="he7-f4-FG4"/>
+                                            <constraint firstItem="L2X-tG-5Rc" firstAttribute="leading" secondItem="IW1-fP-JA2" secondAttribute="leading" constant="20" id="j6h-bj-9xM"/>
+                                            <constraint firstAttribute="trailing" secondItem="L2X-tG-5Rc" secondAttribute="trailing" constant="20" id="yL9-qh-gSQ"/>
                                         </constraints>
                                     </stackView>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="bottom" secondItem="IW1-fP-JA2" secondAttribute="bottom" id="3ik-gA-ibr"/>
-                                    <constraint firstAttribute="trailing" secondItem="IW1-fP-JA2" secondAttribute="trailing" id="CTR-KQ-dfe"/>
-                                    <constraint firstItem="IW1-fP-JA2" firstAttribute="top" secondItem="Vmw-Em-nDe" secondAttribute="top" constant="-7" id="tUC-YI-p5H"/>
-                                    <constraint firstItem="IW1-fP-JA2" firstAttribute="centerX" secondItem="Vmw-Em-nDe" secondAttribute="centerX" id="tfr-r2-KRr"/>
-                                    <constraint firstItem="IW1-fP-JA2" firstAttribute="leading" secondItem="Vmw-Em-nDe" secondAttribute="leading" id="tyy-hG-74V"/>
+                                    <constraint firstItem="IW1-fP-JA2" firstAttribute="top" secondItem="Vmw-Em-nDe" secondAttribute="top" id="RzY-6f-Dea"/>
+                                    <constraint firstItem="IW1-fP-JA2" firstAttribute="leading" secondItem="Vmw-Em-nDe" secondAttribute="leading" id="Zda-hU-aed"/>
+                                    <constraint firstAttribute="bottom" secondItem="IW1-fP-JA2" secondAttribute="bottom" id="f8v-V8-WJi"/>
+                                    <constraint firstAttribute="trailing" secondItem="IW1-fP-JA2" secondAttribute="trailing" id="yt2-3s-dfC"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -92,6 +99,8 @@
                         <outlet property="BodiesContainer" destination="x5P-ED-2lM" id="Y5g-dk-U1B"/>
                         <outlet property="Controls" destination="Vmw-Em-nDe" id="8gd-4i-j7U"/>
                         <outlet property="SpaceView" destination="cnw-kS-L8O" id="Ga7-uI-JTg"/>
+                        <outlet property="radiusChange" destination="AqQ-39-xci" id="D8V-Uf-NJR"/>
+                        <outlet property="simulationSpeed" destination="L2X-tG-5Rc" id="mwS-jU-bP6"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

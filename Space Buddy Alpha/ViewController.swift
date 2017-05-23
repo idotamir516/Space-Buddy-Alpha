@@ -10,12 +10,34 @@ import UIKit
 
 class ViewController: UIViewController, ViewDragDelegate {
     
+    @IBOutlet weak var simulationSpeed: UISlider!
+    @IBOutlet weak var radiusChange: UISlider!
     var space = Space();
     var bodiesList: [DraggableImageView:Body] = [:]
     var movingBodies: [DraggableImageView:Body] = [:]
     var timer: Timer = Timer()
     var updateTime: Double = 0.01;
     var spaceTime: Double = 1
+    @IBAction func simulationSpeedChanged(sender: UISlider) {
+        timer.invalidate() // just in case this button is tapped multiple times
+        
+        if(sender.value != 0){
+            // start the timer
+            timer = Timer.scheduledTimer(withTimeInterval: (0.01 / Double(sender.value)), repeats: true, block: { _ in
+                self.update()
+            })
+        }
+        updateTime = 0.1 / Double(sender.value)
+    }
+    
+    @IBAction func radiusChanged(sender: UISlider) {
+        timer.invalidate() // just in case this button is tapped multiple times
+        
+        if(sender.value != 0){
+            // start the timer
+            spaceRadius = 2E12 / Double(sender.value)
+        }
+    }
     
     var smallestLength: Double {
         let width =  SpaceView.frame.width
@@ -34,7 +56,7 @@ class ViewController: UIViewController, ViewDragDelegate {
     }
     
     func createTimer() {
-        timer = Timer.scheduledTimer(withTimeInterval: updateTime, repeats: true, block: { _ in
+        timer = Timer.scheduledTimer(withTimeInterval: updateTime / Double(simulationSpeed.value), repeats: true, block: { _ in
             self.update()
         })
     }
