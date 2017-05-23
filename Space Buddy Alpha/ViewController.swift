@@ -54,7 +54,7 @@ class ViewController: UIViewController, ViewDragDelegate {
         return Double(width < height ? width : height);
     }
     
-    var spaceRadius: Double = 2E12
+    var spaceRadius: Double = 1E12
     
     func spaceToView(position: Vector2D) -> CGPoint{
         let (x, y) = (position.x, position.y)
@@ -103,6 +103,13 @@ class ViewController: UIViewController, ViewDragDelegate {
         let newCenter = spaceToView(position: body.position)
         let newFrame = view.frame.offsetBy(dx: newCenter.x - oldCenter.x, dy: newCenter.y - oldCenter.y)
         view.frame = SpaceView.convert(newFrame, to: self.view)
+        if view.inIllegalZone(){
+            view.alpha = 0
+        }else{
+            if view.alpha == 0 {
+                view.alpha = 1
+            }
+        }
     }
     
     func handleBegin(_ view: DraggableImageView, inLegalZone: Bool) {
