@@ -26,8 +26,11 @@ class ViewController: UIViewController, ViewDragDelegate {
             timer = Timer.scheduledTimer(withTimeInterval: (0.01 / Double(sender.value)), repeats: true, block: { _ in
                 self.update()
             })
+            updateTime = 0.1 / Double(sender.value)
         }
-        updateTime = 0.1 / Double(sender.value)
+        else {
+            updateTime = 0
+        }
     }
     
     @IBAction func radiusChanged(sender: UISlider) {
@@ -35,7 +38,10 @@ class ViewController: UIViewController, ViewDragDelegate {
         
         if(sender.value != 0){
             // start the timer
-            spaceRadius = 2E12 / Double(sender.value)
+            spaceRadius = 2E12 * Double(sender.value)
+        }
+        else {
+            spaceRadius = 2E12
         }
     }
     
