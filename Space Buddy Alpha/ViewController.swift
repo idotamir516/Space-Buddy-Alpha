@@ -12,6 +12,9 @@ class ViewController: UIViewController, ViewDragDelegate {
     
     @IBOutlet weak var simulationSpeed: UISlider!
     @IBOutlet weak var radiusChange: UISlider!
+    @IBOutlet weak var clearSpace: UIButton!
+    
+    
     var space = Space();
     var bodiesList: [DraggableImageView:Body] = [:]
     var movingBodies: [DraggableImageView:Body] = [:]
@@ -34,18 +37,14 @@ class ViewController: UIViewController, ViewDragDelegate {
     }
     
     @IBAction func radiusChanged(sender: UISlider) {
-        timer.invalidate() // just in case this button is tapped multiple times
-        if(sender.value != 0){
             // start the timer
-            spaceRadius = Double(sender.value) * (2E12 - 2E6) + 2E6
+            let exponent = -40 * (Double(sender.value) - 0.5)
+            spaceRadius = 2E14 / (1 + pow(M_E, exponent))
             update()
-            timer = Timer.scheduledTimer(withTimeInterval: (0.01 / Double(sender.value)), repeats: true, block: { _ in
-                self.update()
-            })
-        }
-        else {
-            spaceRadius = 2E6
-        }
+            //timer = Timer.scheduledTimer(withTimeInterval: (0.01 / Double(sender.value)), repeats: true, block: { _ in
+                //self.update()
+            //})
+        
     }
     
     var smallestLength: Double {
@@ -54,7 +53,7 @@ class ViewController: UIViewController, ViewDragDelegate {
         return Double(width < height ? width : height);
     }
     
-    var spaceRadius: Double = 1E12
+    var spaceRadius: Double = 1E14
     
     func spaceToView(position: Vector2D) -> CGPoint{
         let (x, y) = (position.x, position.y)
@@ -91,8 +90,10 @@ class ViewController: UIViewController, ViewDragDelegate {
     func update(){
         var newBodiesList: [DraggableImageView:Body] = [:]
         for (view, body) in bodiesList{
-            let newBody = space.bodies.first(where: {$0 == body})!
-            newBodiesList[view] = newBody;
+            let newBodyOptional = space.bodies.first(where: {$0 == body})
+            if let newBody = newBodyOptional{
+                newBodiesList[view] = newBody;}
+            
         }
         bodiesList = newBodiesList
         space.update(time: spaceTime)
@@ -111,6 +112,8 @@ class ViewController: UIViewController, ViewDragDelegate {
         let newCenter = spaceToView(position: body.position)
         let newFrame = view.frame.offsetBy(dx: newCenter.x - oldCenter.x, dy: newCenter.y - oldCenter.y)
         view.frame = SpaceView.convert(newFrame, to: self.view)
+        let dx = view.frame.width 
+        //view.frame.insetBy(dx: <#T##CGFloat#>, dy: <#T##CGFloat#>)
         if view.inIllegalZone(){
             view.alpha = 0
         }else{
@@ -150,15 +153,31 @@ class ViewController: UIViewController, ViewDragDelegate {
 
 
     @IBOutlet weak var BodiesContainer: UIView!
-    @IBOutlet weak var SpaceView: UIView!
+    @IBOutlet weak var SpaceView: UIImageView!
     @IBOutlet weak var Controls: UIView!
     
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        setUp()
+        
+        
+        DraggableImageView.IllegalZones = [Controls, BodiesContainer]
+        // Do any additional setup after loading the view, typically from a nib.
+    }
+    
+    func setUp(){
         createTimer()
         createImages()
+      
+        clearSpace.layer.borderColor = UIColor(colorLiteralRed: 0, green: 122/255, blue: 1, alpha: 1).cgColor
+        clearSpace.layer.borderWidth = 6
+        clearSpace.layer.cornerRadius = 10
+        clearSpace.clipsToBounds = true
+        clearSpace.contentEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10)
+        
         BodiesContainer.layer.borderColor = UIColor.darkGray.cgColor
         BodiesContainer.layer.borderWidth = 6
         BodiesContainer.layer.cornerRadius = 10
@@ -168,16 +187,12 @@ class ViewController: UIViewController, ViewDragDelegate {
         Controls.layer.borderColor = UIColor.darkGray.cgColor
         Controls.layer.borderWidth = 6
         Controls.layer.cornerRadius = 10
-        
         addGrayFixes()
-        
-        DraggableImageView.IllegalZones = [Controls, BodiesContainer]
-        // Do any additional setup after loading the view, typically from a nib.
     }
     
     func addGrayFixes(){
         let grayView = UIView()
-        grayView.frame = CGRect(x: Controls.frame.minX + 62, y: Controls.frame.maxY, width: 15, height: 12)
+        grayView.frame = CGRect(x: Controls.frame.minX + 62, y: Controls.frame.maxY, width: 12, height: 12)
         grayView.backgroundColor = UIColor.darkGray
         view.addSubview(grayView)
         
@@ -193,6 +208,7 @@ class ViewController: UIViewController, ViewDragDelegate {
     }
     
     func createImages(){
+        print(BodiesContainer.frame)
         let w = Double(BodiesContainer.frame.width)
         let h = Double(BodiesContainer.frame.height)
         var frame = CGRect(x: w/6 + 20, y: 50, width: w, height: h / 7)
@@ -208,6 +224,25 @@ class ViewController: UIViewController, ViewDragDelegate {
         }
         view.sendSubview(toBack: SpaceView)
     }
+    
+    func removeSpaceviews(){
+        for subview in view.subviews where subview is DraggableImageView{
+            subview.removeFromSuperview()
+        }
+    }
+    
+    func reset(){
+        BodiesContainer.frame = CGRect(x: 20, y: 20, width: 205, height: 748)
+        timer.invalidate()
+        removeSpaceviews()
+        bodiesList.removeAll()
+        space.bodies.removeAll()
+        setUp()
+    }
+    @IBAction func clear() {
+        reset()
+    }
+    
     
 }
 

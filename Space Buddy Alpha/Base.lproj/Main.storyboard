@@ -25,42 +25,72 @@
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="x5P-ED-2lM">
                                 <rect key="frame" x="20" y="20" width="205" height="748"/>
-                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cnw-kS-L8O">
-                                <rect key="frame" x="225" y="20" width="779" height="562"/>
-                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </view>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="starfield" translatesAutoresizingMaskIntoConstraints="NO" id="UEx-SY-z2m">
+                                <rect key="frame" x="225" y="20" width="779" height="769"/>
+                            </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Vmw-Em-nDe">
-                                <rect key="frame" x="225" y="582" width="779" height="186"/>
+                                <rect key="frame" x="225" y="538" width="779" height="230"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="IW1-fP-JA2">
-                                        <rect key="frame" x="0.0" y="0.0" width="779" height="186"/>
+                                        <rect key="frame" x="0.0" y="10" width="779" height="210"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="249" text="Simulation Speed:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kj2-Qw-HVL">
-                                                <rect key="frame" x="269" y="0.0" width="240.5" height="46.5"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
-                                                <nil key="textColor"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="249" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kj2-Qw-HVL">
+                                                <rect key="frame" x="236.5" y="0.0" width="306.5" height="42"/>
+                                                <attributedString key="attributedText">
+                                                    <fragment content="Simulation Speed:">
+                                                        <attributes>
+                                                            <color key="NSColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                            <font key="NSFont" size="30" name="Courier-Bold"/>
+                                                            <paragraphStyle key="NSParagraphStyle" alignment="right" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                                        </attributes>
+                                                    </fragment>
+                                                </attributedString>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="L2X-tG-5Rc">
-                                                <rect key="frame" x="18" y="46.5" width="743" height="47.5"/>
+                                                <rect key="frame" x="18" y="42" width="743" height="43"/>
                                                 <connections>
                                                     <action selector="simulationSpeedChangedWithSender:" destination="BYZ-38-t0r" eventType="valueChanged" id="ILB-C3-uxR"/>
                                                 </connections>
                                             </slider>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Radius:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vay-Z4-ssD">
-                                                <rect key="frame" x="340" y="93" width="98.5" height="46.5"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
-                                                <nil key="textColor"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vay-Z4-ssD">
+                                                <rect key="frame" x="326.5" y="84" width="126.5" height="42"/>
+                                                <attributedString key="attributedText">
+                                                    <fragment content="Radius:">
+                                                        <attributes>
+                                                            <color key="NSColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                            <font key="NSFont" size="30" name="Courier-Bold"/>
+                                                            <paragraphStyle key="NSParagraphStyle" alignment="right" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                                        </attributes>
+                                                    </fragment>
+                                                </attributedString>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="AqQ-39-xci">
-                                                <rect key="frame" x="18" y="139.5" width="743" height="47.5"/>
+                                                <rect key="frame" x="18" y="126" width="743" height="43"/>
                                                 <connections>
                                                     <action selector="radiusChangedWithSender:" destination="BYZ-38-t0r" eventType="valueChanged" id="47Z-Wd-1gp"/>
                                                 </connections>
                                             </slider>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wgb-fv-jxe">
+                                                <rect key="frame" x="290" y="168" width="199" height="42"/>
+                                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <state key="normal">
+                                                    <attributedString key="attributedTitle">
+                                                        <fragment content="Clear Space">
+                                                            <attributes>
+                                                                <color key="NSColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                                <font key="NSFont" size="30" name="Courier-Bold"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                    </attributedString>
+                                                </state>
+                                                <connections>
+                                                    <action selector="clear" destination="BYZ-38-t0r" eventType="touchUpInside" id="n0n-vz-TH4"/>
+                                                </connections>
+                                            </button>
                                         </subviews>
                                         <constraints>
                                             <constraint firstItem="AqQ-39-xci" firstAttribute="leading" secondItem="IW1-fP-JA2" secondAttribute="leading" constant="20" id="OBU-Bp-Vd7"/>
@@ -70,35 +100,35 @@
                                         </constraints>
                                     </stackView>
                                 </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstItem="IW1-fP-JA2" firstAttribute="top" secondItem="Vmw-Em-nDe" secondAttribute="top" id="RzY-6f-Dea"/>
+                                    <constraint firstItem="IW1-fP-JA2" firstAttribute="top" secondItem="Vmw-Em-nDe" secondAttribute="top" constant="10" id="RzY-6f-Dea"/>
                                     <constraint firstItem="IW1-fP-JA2" firstAttribute="leading" secondItem="Vmw-Em-nDe" secondAttribute="leading" id="Zda-hU-aed"/>
-                                    <constraint firstAttribute="bottom" secondItem="IW1-fP-JA2" secondAttribute="bottom" id="f8v-V8-WJi"/>
+                                    <constraint firstAttribute="bottom" secondItem="IW1-fP-JA2" secondAttribute="bottom" constant="10" id="f8v-V8-WJi"/>
                                     <constraint firstAttribute="trailing" secondItem="IW1-fP-JA2" secondAttribute="trailing" id="yt2-3s-dfC"/>
                                 </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstAttribute="trailingMargin" secondItem="cnw-kS-L8O" secondAttribute="trailing" id="1EY-e2-8MQ"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="Vmw-Em-nDe" secondAttribute="bottom" id="2PW-bj-ayv"/>
+                            <constraint firstItem="UEx-SY-z2m" firstAttribute="leading" secondItem="x5P-ED-2lM" secondAttribute="trailing" id="7na-iA-Nb1"/>
                             <constraint firstItem="x5P-ED-2lM" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="9ke-89-Rsw"/>
-                            <constraint firstItem="cnw-kS-L8O" firstAttribute="height" secondItem="x5P-ED-2lM" secondAttribute="height" multiplier="0.75" constant="0.75" id="JHJ-NJ-ENY"/>
-                            <constraint firstItem="Vmw-Em-nDe" firstAttribute="top" secondItem="cnw-kS-L8O" secondAttribute="bottom" id="NKL-Jd-08d"/>
+                            <constraint firstItem="UEx-SY-z2m" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="JVI-Zl-Y2n"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="UEx-SY-z2m" secondAttribute="trailing" id="Tr0-3O-1gh"/>
+                            <constraint firstItem="UEx-SY-z2m" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" constant="0.75" id="Ykg-lc-ewI"/>
                             <constraint firstItem="x5P-ED-2lM" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" multiplier="0.2" id="fhx-fa-Rgs"/>
                             <constraint firstItem="x5P-ED-2lM" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="g1s-EU-ylF"/>
                             <constraint firstItem="Vmw-Em-nDe" firstAttribute="leading" secondItem="x5P-ED-2lM" secondAttribute="trailing" id="ld8-AK-44I"/>
-                            <constraint firstItem="cnw-kS-L8O" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="lfv-Si-03l"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Vmw-Em-nDe" secondAttribute="trailing" id="otc-Ig-EeA"/>
-                            <constraint firstItem="cnw-kS-L8O" firstAttribute="leading" secondItem="x5P-ED-2lM" secondAttribute="trailing" id="xSw-Y9-GIT"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="x5P-ED-2lM" secondAttribute="bottom" id="xne-lm-qV1"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="BodiesContainer" destination="x5P-ED-2lM" id="Y5g-dk-U1B"/>
                         <outlet property="Controls" destination="Vmw-Em-nDe" id="8gd-4i-j7U"/>
-                        <outlet property="SpaceView" destination="cnw-kS-L8O" id="Ga7-uI-JTg"/>
+                        <outlet property="SpaceView" destination="UEx-SY-z2m" id="Sam-kq-Pal"/>
+                        <outlet property="clearSpace" destination="wgb-fv-jxe" id="Okp-Rh-twt"/>
                         <outlet property="radiusChange" destination="AqQ-39-xci" id="D8V-Uf-NJR"/>
                         <outlet property="simulationSpeed" destination="L2X-tG-5Rc" id="mwS-jU-bP6"/>
                     </connections>
@@ -108,4 +138,7 @@
             <point key="canvasLocation" x="71.484375" y="125"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="starfield" width="512" height="512"/>
+    </resources>
 </document>
