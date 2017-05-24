@@ -20,7 +20,7 @@ class DraggableImageView: UIImageView{
     weak var delegate: ViewDragDelegate?
     
     static var IllegalZones: [UIView] = []
-    
+    var color = ViewController.pickNextColor()
     override init(image: UIImage?) {
         super.init(image: image)
         let panRecognizer = UIPanGestureRecognizer(target:self, action:#selector(DraggableImageView.detectPan(_:)))
@@ -37,6 +37,7 @@ class DraggableImageView: UIImageView{
         image.frame = self.frame;
         image.original = true;
         image.delegate = delegate
+        image.color = ViewController.pickNextColor()
         self.superview?.addSubview(image)
     }
     
@@ -110,7 +111,11 @@ class DraggableImageView: UIImageView{
         let body = Body(mass: mass, position: Vector2D(), velocity: Vector2D(), radius: radius)
         return body;
     }
-}
+    
+    }
+
+    
+
 
 extension CGPoint{
     static func - (left: CGPoint, right: CGPoint) -> CGPoint {

@@ -13,7 +13,8 @@ class ViewController: UIViewController, ViewDragDelegate {
     @IBOutlet weak var simulationSpeed: UISlider!
     @IBOutlet weak var radiusChange: UISlider!
     @IBOutlet weak var clearSpace: UIButton!
-    
+    var counter = 0.0
+    static var colorIndex = 0
     
     var space = Space();
     var bodiesList: [DraggableImageView:Body] = [:]
@@ -29,7 +30,7 @@ class ViewController: UIViewController, ViewDragDelegate {
             timer = Timer.scheduledTimer(withTimeInterval: (0.01 / Double(sender.value)), repeats: true, block: { _ in
                 self.update()
             })
-            updateTime = 0.1 / Double(sender.value)
+            updateTime = 0.01 / Double(sender.value)
         }
         else {
             updateTime = 0
@@ -78,15 +79,6 @@ class ViewController: UIViewController, ViewDragDelegate {
         return Vector2D(x: xCoor, y: yCoor)
     }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let vts = ViewToSpace(point: touches.first!.location(in: view))
-        print("vts \(vts)")
-        let stv = spaceToView(position: vts)
-        print("stv \(stv)")
-        let redo = ViewToSpace(point: stv)
-        print("redo: \(redo)")
-    }
-    
     func update(){
         var newBodiesList: [DraggableImageView:Body] = [:]
         for (view, body) in bodiesList{
@@ -101,6 +93,7 @@ class ViewController: UIViewController, ViewDragDelegate {
     }
     
     func putViewsInCorrectPosition(){
+        counter += 1
         for (view, body) in bodiesList{
             correctPosition(of: view, using: body)
         }
@@ -112,8 +105,6 @@ class ViewController: UIViewController, ViewDragDelegate {
         let newCenter = spaceToView(position: body.position)
         let newFrame = view.frame.offsetBy(dx: newCenter.x - oldCenter.x, dy: newCenter.y - oldCenter.y)
         view.frame = SpaceView.convert(newFrame, to: self.view)
-        let dx = view.frame.width 
-        //view.frame.insetBy(dx: <#T##CGFloat#>, dy: <#T##CGFloat#>)
         if view.inIllegalZone(){
             view.alpha = 0
         }else{
@@ -121,6 +112,28 @@ class ViewController: UIViewController, ViewDragDelegate {
                 view.alpha = 1
             }
         }
+        if counter.truncatingRemainder(dividingBy: 25)  == 0{
+            counter = 0
+            createTraceAt(point: CGPoint(x: view.frame.minX, y: view.frame.midY), alpha: view.alpha, color: view.color)}
+    }
+    
+    func createTraceAt(point: CGPoint, alpha: CGFloat, color: CGColor){
+        let circle = CAShapeLayer()
+        circle.path = UIBezierPath(arcCenter: point, radius: 20, startAngle: 0, endAngle: 2 * .pi, clockwise: true).cgPath
+        circle.fillColor = color
+        self.view.layer.addSublayer(circle)
+        let animation = CABasicAnimation(keyPath: "opacity")
+        animation.duration = 10
+        animation.fromValue = alpha
+        animation.toValue = 0
+        Timer.scheduledTimer(withTimeInterval: 10, repeats: false, block: {_ in circle.removeFromSuperlayer()})
+        circle.add(animation, forKey: "animateOpacity")
+        
+        /*
+        let timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: false, block: {_ in
+            let newAlpha = originalColor
+            circle.fillColor = circle.fillColor?.alpha})
+        timer.tolerance = 10*/
     }
     
     func handleBegin(_ view: DraggableImageView, inLegalZone: Bool) {
@@ -208,10 +221,8 @@ class ViewController: UIViewController, ViewDragDelegate {
     }
     
     func createImages(){
-        print(BodiesContainer.frame)
-        let w = Double(BodiesContainer.frame.width)
         let h = Double(BodiesContainer.frame.height)
-        var frame = CGRect(x: w/6 + 20, y: 50, width: w, height: h / 7)
+        var frame = CGRect(x: h/6.5, y: 100, width: h/7, height: h / 6.5)
         for (name, image) in SpaceCell.planetImages{
             if name != "blank"{
                 let imageView = DraggableImageView(image: image)
@@ -219,7 +230,7 @@ class ViewController: UIViewController, ViewDragDelegate {
                 imageView.lastLocation = imageView.center
                 imageView.delegate = self
                 view.addSubview(imageView)
-                frame = frame.offsetBy(dx: 0, dy: CGFloat(1.5 * h / 7))
+                frame = frame.offsetBy(dx: 0, dy: CGFloat(1.5 * h / 6.5))
             }
         }
         view.sendSubview(toBack: SpaceView)
@@ -231,6 +242,13 @@ class ViewController: UIViewController, ViewDragDelegate {
         }
     }
     
+    func removeSubLayers(){
+        if let sublayers = view.layer.sublayers{
+        for sublayer in sublayers where sublayer is CAShapeLayer{
+            sublayer.removeFromSuperlayer()
+            }}
+    }
+    
     func reset(){
         BodiesContainer.frame = CGRect(x: 20, y: 20, width: 205, height: 748)
         timer.invalidate()
@@ -238,14 +256,25 @@ class ViewController: UIViewController, ViewDragDelegate {
         bodiesList.removeAll()
         space.bodies.removeAll()
         setUp()
+        removeSubLayers()
     }
     @IBAction func clear() {
         reset()
     }
     
     
+    static let colors: [CGColor] = [UIColor.blue, UIColor.brown, UIColor.cyan, UIColor.gray, UIColor.green, UIColor.red, UIColor.yellow, UIColor.orange, UIColor.purple, UIColor.white].map{$0.cgColor}
+    
+    static func pickNextColor() -> CGColor{
+        if ViewController.colorIndex == ViewController.colors.count{
+            ViewController.colorIndex = 0;
+        }
+        let color = ViewController.colors[ViewController.colorIndex]
+        ViewController.colorIndex += 1
+        return color
+    }
+    
 }
-
 
 
 class SpaceCell: UICollectionViewCell {
@@ -269,8 +298,6 @@ extension Dictionary where Value: Equatable {
         return filter{$1 == value}.first?.key
         }
     }
-
-
 
 
 
